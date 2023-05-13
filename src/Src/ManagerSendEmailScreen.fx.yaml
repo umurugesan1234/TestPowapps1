@@ -1,0 +1,343 @@
+ManagerSendEmailScreen As screen:
+    Height: =Max(App.Height, App.DesignHeight)
+    OnHidden: =Set(_showDetails, false)
+    OnVisible: |-
+        =Concurrent(
+            Set(_navMenuSelect, "My Leave Balance"),
+            ClearCollect(RequesterBalanceCollection, 
+            { type: "Vacation", balance: Value(_requesterBalanceRecord.Vacation) - Value(_requesterBalanceRecord.VacationUsed)},
+            {type:"Sick Leave", balance:Value(_requesterBalanceRecord.Sick)-Value(_requesterBalanceRecord.SickUsed)},
+            {type:"Floating Holiday", balance:Value(_requesterBalanceRecord.Floating)-Value(_requesterBalanceRecord.FloatingUsed)},
+            {type:"Jury Duty", balance:Value(_requesterBalanceRecord.JuryDuty)-Value(_requesterBalanceRecord.JuryDutyUsed)},
+            {type:"Bereavement", balance:Value(_requesterBalanceRecord.Bereavement)-Value(_requesterBalanceRecord.BereavementUsed)}
+           )
+        )
+    Orientation: =If(ManagerSendEmailScreen.Width < ManagerSendEmailScreen.Height, Layout.Vertical, Layout.Horizontal)
+    Size: =1 + CountRows(App.SizeBreakpoints) - CountIf(App.SizeBreakpoints, Value >= ManagerSendEmailScreen.Width)
+    Width: =Max(App.Width, App.DesignWidth)
+
+    Rectangle3_8 As rectangle:
+        DisabledFill: =Rectangle3_8.Fill
+        Fill: =RGBA(249, 249, 249, 1)
+        FocusedBorderColor: =Rectangle3_8.BorderColor
+        Height: =695
+        HoverFill: =Rectangle3_8.Fill
+        PressedFill: =Rectangle3_8.Fill
+        Width: =230
+        X: =1136
+        Y: =73
+        ZIndex: =3
+
+    Header_8 As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =11
+
+        Rectangle1_8 As rectangle:
+            DisabledFill: =Rectangle1_8.Fill
+            Fill: =RGBA(0, 71, 144, 1)
+            FocusedBorderColor: =Rectangle1_8.BorderColor
+            Height: =80
+            HoverFill: =Rectangle1_8.Fill
+            PressedFill: =Rectangle1_8.Fill
+            Width: =1366
+            ZIndex: =4
+
+        LblHeaderTItle1_8 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =LblHeaderTItle1_8.BorderColor
+            Font: =Font.Lato
+            Height: =80
+            HoverBorderColor: =LblHeaderTItle1_8.BorderColor
+            HoverColor: =LblHeaderTItle1_8.Color
+            HoverFill: =LblHeaderTItle1_8.Fill
+            PressedBorderColor: =LblHeaderTItle1_8.BorderColor
+            PressedColor: =LblHeaderTItle1_8.Color
+            PressedFill: =LblHeaderTItle1_8.Fill
+            Size: =18
+            Text: =Upper("Request")
+            Width: =117
+            X: =30
+            ZIndex: =5
+
+        LblHeaderTitle2_8 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =LblHeaderTitle2_8.BorderColor
+            Height: =80
+            HoverBorderColor: =LblHeaderTitle2_8.BorderColor
+            HoverColor: =LblHeaderTitle2_8.Color
+            HoverFill: =LblHeaderTitle2_8.Fill
+            PressedBorderColor: =LblHeaderTitle2_8.BorderColor
+            PressedColor: =LblHeaderTitle2_8.Color
+            PressedFill: =LblHeaderTitle2_8.Fill
+            Size: =18
+            Text: =Upper("Leave")
+            Width: =138
+            X: =178
+            ZIndex: =6
+
+        icon2_8 As icon.ArrowRight:
+            Color: =Color.White
+            DisabledFill: =icon2_8.Fill
+            FocusedBorderColor: =icon2_8.BorderColor
+            HoverBorderColor: =ColorFade(icon2_8.BorderColor, 20%)
+            HoverColor: =ColorFade(icon2_8.Color, 20%)
+            HoverFill: =icon2_8.Fill
+            Icon: =Icon.ArrowRight
+            PressedBorderColor: =ColorFade(icon2_8.BorderColor, -20%)
+            PressedColor: =ColorFade(icon2_8.Color, -20%)
+            PressedFill: =icon2_8.Fill
+            Width: =32
+            X: =143
+            Y: =9
+            ZIndex: =7
+
+    RectNavSep_7 As rectangle:
+        DisabledFill: =RectNavSep_7.Fill
+        Fill: =RGBA(204, 204, 204, 1)
+        FocusedBorderColor: =RectNavSep_7.BorderColor
+        Height: =688
+        HoverFill: =RectNavSep_7.Fill
+        PressedFill: =RectNavSep_7.Fill
+        Width: =1
+        X: =231
+        Y: =80
+        ZIndex: =30
+
+    iconBack As icon.ChevronLeft:
+        AccessibleLabel: ="navigate back"
+        Color: =RGBA(12, 132, 255, 1)
+        DisabledFill: =iconBack.Fill
+        FocusedBorderColor: =iconBack.BorderColor
+        Height: =40
+        HoverBorderColor: =ColorFade(iconBack.BorderColor, 20%)
+        HoverColor: =ColorFade(iconBack.Color, 20%)
+        HoverFill: =iconBack.Fill
+        Icon: =Icon.ChevronLeft
+        OnSelect: =Back()
+        PaddingBottom: =10
+        PaddingLeft: =10
+        PaddingRight: =10
+        PaddingTop: =10
+        PressedBorderColor: =ColorFade(iconBack.BorderColor, -20%)
+        PressedColor: =ColorFade(iconBack.Color, -20%)
+        PressedFill: =iconBack.Fill
+        TabIndex: =0
+        Width: =40
+        X: =254
+        Y: =96
+        ZIndex: =31
+
+    LblBack As label:
+        Color: =RGBA(12, 132, 255, 1)
+        FocusedBorderColor: =LblBack.BorderColor
+        FocusedBorderThickness: =2
+        HoverBorderColor: =LblBack.BorderColor
+        HoverColor: =LblBack.Color
+        HoverFill: =LblBack.Fill
+        OnSelect: =Select(iconBack)
+        PressedBorderColor: =LblBack.BorderColor
+        PressedColor: =LblBack.Color
+        PressedFill: =LblBack.Fill
+        Size: =12
+        TabIndex: =0
+        Text: ="Back"
+        Width: =68
+        X: =294
+        Y: =96
+        ZIndex: =32
+
+    LblSubjectHeader As label:
+        FocusedBorderColor: =LblSubjectHeader.BorderColor
+        Font: =Font.Lato
+        FontWeight: =FontWeight.Semibold
+        HoverBorderColor: =LblSubjectHeader.BorderColor
+        HoverColor: =LblSubjectHeader.Color
+        HoverFill: =LblSubjectHeader.Fill
+        PressedBorderColor: =LblSubjectHeader.BorderColor
+        PressedColor: =LblSubjectHeader.Color
+        PressedFill: =LblSubjectHeader.Fill
+        Text: ="Subject"
+        X: =254
+        Y: =131
+        ZIndex: =33
+
+    TextInputManagerEmailBody As text:
+        AccessibleLabel: ="email body"
+        BorderColor: =RGBA(202, 202, 202, 1)
+        BorderThickness: =1
+        Color: =RGBA(74, 74, 74, 1)
+        Default: =
+        FocusedBorderColor: =TextInputManagerEmailBody.BorderColor
+        FocusedBorderThickness: =1
+        Font: =Font.Lato
+        Height: =151
+        HoverBorderColor: =TextInputManagerEmailBody.BorderColor
+        Mode: =TextMode.MultiLine
+        PaddingBottom: =13
+        PaddingLeft: =11
+        PaddingRight: =11
+        PaddingTop: =13
+        PressedBorderColor: =TextInputManagerEmailBody.HoverBorderColor
+        PressedColor: =TextInputManagerEmailBody.Color
+        PressedFill: =TextInputManagerEmailBody.Fill
+        Size: =13.5
+        Width: =TextInputManagerEmailSubject.Width
+        X: =254
+        Y: =276
+        ZIndex: =34
+
+    LblMessageHeader As label:
+        Color: =RGBA(74, 74, 74, 1)
+        FocusedBorderColor: =LblMessageHeader.BorderColor
+        Font: =Font.Lato
+        FontWeight: =FontWeight.Bold
+        Height: =31
+        HoverBorderColor: =LblMessageHeader.BorderColor
+        HoverColor: =LblMessageHeader.Color
+        HoverFill: =LblMessageHeader.Fill
+        LineHeight: =1
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0.00
+        PaddingTop: =0.00
+        PressedBorderColor: =LblMessageHeader.BorderColor
+        PressedColor: =LblMessageHeader.Color
+        PressedFill: =LblMessageHeader.Fill
+        Size: =13.5
+        Text: ="Message"
+        Width: =100
+        X: =254
+        Y: =227
+        ZIndex: =35
+
+    TextInputManagerEmailSubject As text:
+        AccessibleLabel: ="email subject"
+        BorderColor: =RGBA(202, 202, 202, 1)
+        BorderThickness: =1
+        Color: =RGBA(74, 74, 74, 1)
+        Default: =
+        FocusedBorderColor: =TextInputManagerEmailSubject.BorderColor
+        FocusedBorderThickness: =1
+        Font: =Font.Lato
+        Height: =36
+        HoverBorderColor: =TextInputManagerEmailSubject.BorderColor
+        PaddingBottom: =0
+        PaddingLeft: =11
+        PaddingRight: =11
+        PaddingTop: =0.00
+        PressedBorderColor: =TextInputManagerEmailSubject.HoverBorderColor
+        PressedColor: =TextInputManagerEmailSubject.Color
+        PressedFill: =TextInputManagerEmailSubject.Fill
+        Size: =13.5
+        Width: =861
+        X: =254
+        Y: =171
+        ZIndex: =36
+
+    Button4_1 As button:
+        BorderColor: =ColorFade(Button4_1.Fill, -15%)
+        DisabledBorderColor: =ColorFade(Button4_1.BorderColor, 70%)
+        DisplayMode: =If(IsBlank(Trim(TextInputManagerEmailSubject.Text)), DisplayMode.Disabled, DisplayMode.Edit)
+        Fill: =RGBA(12, 132, 255, 1)
+        FocusedBorderColor: =Button4_1.BorderColor
+        Font: =Font.Lato
+        Height: =26
+        HoverBorderColor: =ColorFade(Button4_1.BorderColor, 20%)
+        HoverColor: =Button4_1.Color
+        HoverFill: =ColorFade(Button4_1.Fill, 20%)
+        OnSelect: |-
+            =If(
+                _sendEmailsEnabled,
+                Office365.SendEmailV2(
+                    GalleryRequests.Selected.Requester,
+                    TextInputManagerEmailSubject.Text,
+                    TextInputManagerEmailBody.Text,
+                    {Importance: "Normal"}
+                )
+            );
+            Reset(TextInputManagerEmailSubject);
+            Reset(TextInputManagerEmailBody);
+            Back()
+        PressedBorderColor: =Button4_1.Fill
+        PressedColor: =Button4_1.Fill
+        PressedFill: =Button4_1.Color
+        RadiusBottomLeft: =14
+        RadiusBottomRight: =14
+        RadiusTopLeft: =14
+        RadiusTopRight: =14
+        Size: =10.5
+        Text: ="Send"
+        Width: =91
+        X: =1024
+        Y: =454
+        ZIndex: =37
+
+    GalleryNavigation_7 As gallery.galleryVertical:
+        AccessibleLabel: ="Select a gallery item to navigate to it's respective page"
+        DisabledBorderColor: =GalleryNavigation_7.BorderColor
+        DisabledFill: =GalleryNavigation_7.Fill
+        Fill: =RGBA(249, 249, 249, 1)
+        Height: =688
+        HoverBorderColor: =GalleryNavigation_7.BorderColor
+        HoverFill: =GalleryNavigation_7.Fill
+        Items: |
+            =If(_managerView, ManagerNavigation, EmployeeNavigation)
+        Layout: =Layout.Vertical
+        LoadingSpinnerColor: =GalleryNavigation_7.BorderColor
+        OnSelect: |-
+            =Set(_navMenuSelect, ThisItem.MenuItem);
+            If(
+                "Requests" in ThisItem.MenuItem, Navigate(HomeScreen, BorderStyle.None),
+                "Balance" in ThisItem.MenuItem, Navigate(LeaveBalanceScreen, BorderStyle.None),
+                "Holidays" in ThisItem.MenuItem, Navigate(CompanyHolidaysScreen, BorderStyle.None),
+                ThisItem.MenuItem = "About", Navigate(AboutScreen, BorderStyle.None),
+                ThisItem.MenuItem = "Log out", Navigate(LoginScreen, BorderStyle.None)
+            )
+        PressedBorderColor: =GalleryNavigation_7.BorderColor
+        PressedFill: =GalleryNavigation_7.Fill
+        ShowScrollbar: =false
+        TemplateFill: =If(ThisItem.MenuItem = _navMenuSelect, RGBA(255,255,255,1), RGBA(245,245,245,1))
+        TemplatePadding: =0
+        TemplateSize: =72
+        Width: =231
+        Y: =80
+        ZIndex: =38
+
+        LeftMenuSeparator_7 As rectangle:
+            AccessibleLabel: =ThisItem.MenuItem
+            DisabledFill: =LeftMenuSeparator_7.Fill
+            Fill: =RGBA(205, 205, 205, 1)
+            FocusedBorderColor: =LeftMenuSeparator_7.BorderColor
+            Height: =1
+            HoverFill: =LeftMenuSeparator_7.Fill
+            OnSelect: =Select(Parent)
+            PressedFill: =LeftMenuSeparator_7.Fill
+            Width: =GalleryNavigation_7.TemplateWidth
+            Y: =Parent.TemplateHeight - LeftMenuSeparator_7.Height
+            ZIndex: =1
+
+        Label2_7 As label:
+            Align: =TextPosition.Left
+            Color: =If(ThisItem.MenuItem = _navMenuSelect, RGBA(47,41,43,1), RGBA(10,100,204,1))
+            FocusedBorderColor: =Label2_7.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            HoverBorderColor: =Label2_7.BorderColor
+            HoverColor: =Label2_7.Color
+            HoverFill: =Label2_7.Fill
+            OnSelect: =Select(Parent)
+            PaddingLeft: =30
+            PressedBorderColor: =Label2_7.BorderColor
+            PressedColor: =Label2_7.Color
+            PressedFill: =Label2_7.Fill
+            Size: =13.5
+            TabIndex: =0
+            Text: =ThisItem.MenuItem
+            Width: =231
+            ZIndex: =2
+

@@ -1,0 +1,212 @@
+ChangeApproverScreen As screen:
+    Height: =Max(App.Height, App.DesignHeight)
+    OnHidden: =Reset(TextInputSearchUser)
+    OnVisible: =Set(_changingApprover, true)
+    Orientation: =If(ChangeApproverScreen.Width < ChangeApproverScreen.Height, Layout.Vertical, Layout.Horizontal)
+    Size: =1 + CountRows(App.SizeBreakpoints) - CountIf(App.SizeBreakpoints, Value >= ChangeApproverScreen.Width)
+    Width: =Max(App.Width, App.DesignWidth)
+
+    Image4 As image:
+        FocusedBorderColor: =Image4.BorderColor
+        Height: =768
+        HoverBorderColor: =ColorFade(Image4.BorderColor, 20%)
+        HoverFill: =ColorFade(Image4.Fill, 20%)
+        Image: =RequestLeaveBkg
+        PressedBorderColor: =ColorFade(Image4.BorderColor, -20%)
+        PressedFill: =ColorFade(Image4.Fill, -20%)
+        Width: =1366
+        ZIndex: =1
+
+    Rectangle8 As rectangle:
+        DisabledFill: =Rectangle8.Fill
+        Fill: =RGBA(0,0,0,0.6)
+        FocusedBorderColor: =Rectangle8.BorderColor
+        Height: =768
+        HoverFill: =Rectangle8.Fill
+        PressedFill: =Rectangle8.Fill
+        Width: =1366
+        ZIndex: =2
+
+    Rectangle9 As rectangle:
+        DisabledFill: =Rectangle9.Fill
+        Fill: =Color.White
+        FocusedBorderColor: =Rectangle9.BorderColor
+        Height: =700
+        HoverFill: =Rectangle9.Fill
+        PressedFill: =Rectangle9.Fill
+        Width: =904
+        X: =Parent.Width / 2 - Rectangle9.Width / 2
+        Y: =Parent.Height / 2 - Rectangle9.Height / 2
+        ZIndex: =3
+
+    Label21 As label:
+        Align: =LayoutAlignItems.Center
+        Fill: =RGBA(236, 236, 236, 1)
+        FocusedBorderColor: =Label21.BorderColor
+        Font: =Font.Lato
+        FontWeight: =FontWeight.Bold
+        Height: =80
+        HoverBorderColor: =Label21.BorderColor
+        HoverColor: =Label21.Color
+        HoverFill: =Label21.Fill
+        PressedBorderColor: =Label21.BorderColor
+        PressedColor: =Label21.Color
+        PressedFill: =Label21.Fill
+        Size: =18
+        Text: =Upper("Submit to")
+        Width: =Rectangle9.Width
+        X: =231
+        Y: =34
+        ZIndex: =4
+
+    TextInputSearchUser As text:
+        AccessibleLabel: ="Search user"
+        BorderColor: =RGBA(170, 170, 170, 1)
+        BorderThickness: =1
+        Color: =RGBA(74, 74, 74, 1)
+        Default: =""
+        FocusedBorderColor: =TextInputSearchUser.BorderColor
+        FocusedBorderThickness: =1
+        Font: =Font.Lato
+        Height: =88
+        HoverBorderColor: =TextInputSearchUser.BorderColor
+        PaddingBottom: =0
+        PaddingLeft: =90
+        PaddingRight: =25.00
+        PaddingTop: =0.00
+        PressedBorderColor: =TextInputSearchUser.HoverBorderColor
+        PressedColor: =TextInputSearchUser.Color
+        PressedFill: =TextInputSearchUser.Fill
+        RadiusBottomLeft: =4
+        RadiusBottomRight: =4
+        RadiusTopLeft: =4
+        RadiusTopRight: =4
+        Size: =18
+        Width: =850
+        X: =258
+        Y: =140
+        ZIndex: =5
+
+    icon8_1 As icon.Search:
+        Color: =RGBA(12,132,255,1)
+        DisabledFill: =icon8_1.Fill
+        DisplayMode: =DisplayMode.View
+        FocusedBorderColor: =icon8_1.BorderColor
+        Height: =43
+        HoverBorderColor: =ColorFade(icon8_1.BorderColor, 20%)
+        HoverColor: =ColorFade(icon8_1.Color, 20%)
+        HoverFill: =icon8_1.Fill
+        Icon: =Icon.Search
+        PressedBorderColor: =ColorFade(icon8_1.BorderColor, -20%)
+        PressedColor: =ColorFade(icon8_1.Color, -20%)
+        PressedFill: =icon8_1.Fill
+        Width: =43
+        X: =277
+        Y: =162
+        ZIndex: =6
+
+    GalleryChangeApprover As gallery.galleryVertical:
+        AccessibleLabel: ="Search result gallery"
+        DisabledBorderColor: =GalleryChangeApprover.BorderColor
+        DisabledFill: =GalleryChangeApprover.Fill
+        Height: =490
+        HoverBorderColor: =GalleryChangeApprover.BorderColor
+        HoverFill: =GalleryChangeApprover.Fill
+        Items: |-
+            =If(!IsBlank(Trim(TextInputSearchUser.Text)),Office365Users.SearchUser({searchTerm:Trim(TextInputSearchUser.Text)}))
+        Layout: =Layout.Vertical
+        LoadingSpinnerColor: =GalleryChangeApprover.BorderColor
+        OnSelect: |
+            =Set(_selectedApprover, ThisItem);
+            Set(_selectedApproverPhoto, Office365Users.UserPhoto(ThisItem.Id));
+            Back();
+        PressedBorderColor: =GalleryChangeApprover.BorderColor
+        PressedFill: =GalleryChangeApprover.Fill
+        ShowScrollbar: =false
+        TemplateSize: =88
+        Width: =850
+        X: =258
+        Y: =228
+        ZIndex: =7
+
+        LabelUserJobTitle As label:
+            Color: =RGBA(74, 74, 74, 1)
+            FocusedBorderColor: =LabelUserJobTitle.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            Height: =20
+            HoverBorderColor: =LabelUserJobTitle.BorderColor
+            HoverColor: =LabelUserJobTitle.Color
+            HoverFill: =LabelUserJobTitle.Fill
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =30
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =LabelUserJobTitle.BorderColor
+            PressedColor: =LabelUserJobTitle.Color
+            PressedFill: =LabelUserJobTitle.Fill
+            Size: =12
+            Text: =ThisItem.JobTitle
+            Width: =440.00
+            X: =40
+            Y: =35
+            ZIndex: =2
+
+        LabelUserDisplayName As label:
+            Color: =RGBA(74, 74, 74, 1)
+            FocusedBorderColor: =LabelUserDisplayName.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            HoverBorderColor: =LabelUserDisplayName.BorderColor
+            HoverColor: =LabelUserDisplayName.Color
+            HoverFill: =LabelUserDisplayName.Fill
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =30
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =LabelUserDisplayName.BorderColor
+            PressedColor: =LabelUserDisplayName.Color
+            PressedFill: =LabelUserDisplayName.Fill
+            Size: =14
+            TabIndex: =0
+            Text: =ThisItem.DisplayName
+            Width: =500
+            X: =40
+            ZIndex: =3
+
+        Rectangle10 As rectangle:
+            AccessibleLabel: ="Separator"
+            DisabledFill: =Rectangle10.Fill
+            Fill: =RGBA(236,236,236,1)
+            FocusedBorderColor: =Rectangle10.BorderColor
+            Height: =2
+            HoverFill: =Rectangle10.Fill
+            OnSelect: =Select(Parent)
+            PressedFill: =Rectangle10.Fill
+            Width: =Parent.TemplateWidth
+            Y: =68
+            ZIndex: =4
+
+    iconClose As icon.Cancel:
+        AccessibleLabel: ="Cancel"
+        DisabledFill: =iconClose.Fill
+        FocusedBorderColor: =iconClose.BorderColor
+        HoverBorderColor: =ColorFade(iconClose.BorderColor, 20%)
+        HoverColor: =ColorFade(iconClose.Color, 20%)
+        HoverFill: =iconClose.Fill
+        Icon: =Icon.Cancel
+        OnSelect: =Back()
+        PaddingBottom: =17
+        PaddingLeft: =17
+        PaddingRight: =17
+        PaddingTop: =17
+        PressedBorderColor: =ColorFade(iconClose.BorderColor, -20%)
+        PressedColor: =ColorFade(iconClose.Color, -20%)
+        PressedFill: =iconClose.Fill
+        X: =1044
+        Y: =42
+        ZIndex: =8
+

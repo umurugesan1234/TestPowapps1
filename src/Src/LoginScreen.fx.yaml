@@ -1,0 +1,221 @@
+LoginScreen As screen:
+    Height: =Max(App.Height, App.DesignHeight)
+    OnVisible: |-
+        =//whenever user navigates to this page, set their approver to their manager
+        Set(_selectedApprover, Office365Users.Manager(_myProfile.Id));
+        Set(_selectedApproverPhoto, If(Office365Users.UserPhotoMetadata(_selectedApprover.Id).HasPhoto, Office365Users.UserPhoto(_selectedApprover.Id)))
+    Orientation: =If(LoginScreen.Width < LoginScreen.Height, Layout.Vertical, Layout.Horizontal)
+    Size: =1 + CountRows(App.SizeBreakpoints) - CountIf(App.SizeBreakpoints, Value >= LoginScreen.Width)
+    Width: =Max(App.Width, App.DesignWidth)
+
+    LoginAsEmployeeGroup As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =7
+
+        LblEmployeeLogin As label:
+            Align: =LayoutAlignItems.Center
+            Color: =RGBA(0, 0, 0, 1)
+            FocusedBorderColor: =LblEmployeeLogin.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            Height: =14
+            HoverBorderColor: =LblEmployeeLogin.BorderColor
+            HoverColor: =LblEmployeeLogin.Color
+            HoverFill: =LblEmployeeLogin.Fill
+            Live: =Live.Polite
+            OnSelect: =Select(BtnEmployeeLogin)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =LblEmployeeLogin.BorderColor
+            PressedColor: =LblEmployeeLogin.Color
+            PressedFill: =LblEmployeeLogin.Fill
+            Size: =10
+            Text: ="TO SUBMIT A LEAVE REQUEST"
+            Width: =196
+            X: =1011
+            Y: =286
+            ZIndex: =3
+
+        BtnEmployeeLogin As button:
+            BorderColor: =ColorFade(BtnEmployeeLogin.Fill, -15%)
+            BorderThickness: =0
+            DisabledBorderColor: =ColorFade(BtnEmployeeLogin.BorderColor, 70%)
+            Fill: =RGBA(0, 100, 235, 1)
+            FocusedBorderColor: =BtnEmployeeLogin.BorderColor
+            Height: =36
+            HoverBorderColor: =ColorFade(BtnEmployeeLogin.BorderColor, 20%)
+            HoverColor: =BtnEmployeeLogin.Color
+            HoverFill: =ColorFade(BtnEmployeeLogin.Fill, 20%)
+            OnSelect: |-
+                =Set(_managerView,false);
+                Set(_requestTypeFilter,"All");
+                Navigate(HomeScreen,BorderStyle.None)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =BtnEmployeeLogin.Fill
+            PressedColor: =BtnEmployeeLogin.Fill
+            PressedFill: =BtnEmployeeLogin.Color
+            RadiusBottomLeft: =15
+            RadiusBottomRight: =15
+            RadiusTopLeft: =15
+            RadiusTopRight: =15
+            Text: ="Login as an employee"
+            Width: =280
+            X: =969
+            Y: =315
+            ZIndex: =6
+
+    LoginAsManagerGroup As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =9
+
+        LblManagerLogin As label:
+            Align: =LayoutAlignItems.Center
+            Color: =RGBA(0, 0, 0, 1)
+            FocusedBorderColor: =LblManagerLogin.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            Height: =14
+            HoverBorderColor: =LblManagerLogin.BorderColor
+            HoverColor: =LblManagerLogin.Color
+            HoverFill: =LblManagerLogin.Fill
+            Live: =Live.Polite
+            OnSelect: =Select(BtnManagerLogin)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =LblManagerLogin.BorderColor
+            PressedColor: =LblManagerLogin.Color
+            PressedFill: =LblManagerLogin.Fill
+            Size: =10
+            Text: ="TO APPROVE OR DECLINE LEAVE REQUESTS"
+            Width: =286
+            X: =966
+            Y: =416
+            ZIndex: =2
+
+        BtnManagerLogin As button:
+            BorderColor: =ColorFade(BtnManagerLogin.Fill, -15%)
+            BorderThickness: =0
+            DisabledBorderColor: =ColorFade(BtnManagerLogin.BorderColor, 70%)
+            Fill: =RGBA(0, 71, 144, 1)
+            FocusedBorderColor: =BtnManagerLogin.BorderColor
+            Height: =36
+            HoverBorderColor: =ColorFade(BtnManagerLogin.BorderColor, 20%)
+            HoverColor: =BtnManagerLogin.Color
+            HoverFill: =ColorFade(BtnManagerLogin.Fill, 20%)
+            OnSelect: |-
+                =Set(_managerView,true);
+                Set(_requestTypeFilter,"Pending");
+                Navigate(HomeScreen,BorderStyle.None)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =BtnManagerLogin.Fill
+            PressedColor: =BtnManagerLogin.Fill
+            PressedFill: =BtnManagerLogin.Color
+            RadiusBottomLeft: =15
+            RadiusBottomRight: =15
+            RadiusTopLeft: =15
+            RadiusTopRight: =15
+            Text: ="Login as a manager"
+            Width: =280
+            X: =969
+            Y: =445
+            ZIndex: =8
+
+    icon1 As icon.ArrowRight:
+        Color: =Color.Black
+        DisabledFill: =icon1.Fill
+        DisplayMode: =DisplayMode.View
+        FocusedBorderColor: =icon1.BorderColor
+        Height: =56
+        HoverBorderColor: =ColorFade(icon1.BorderColor, 20%)
+        HoverColor: =ColorFade(icon1.Color, 20%)
+        HoverFill: =icon1.Fill
+        Icon: =Icon.ArrowRight
+        PressedBorderColor: =ColorFade(icon1.BorderColor, -20%)
+        PressedColor: =ColorFade(icon1.Color, -20%)
+        PressedFill: =icon1.Fill
+        Width: =56
+        X: =471
+        Y: =397
+        ZIndex: =10
+
+    WelcomePageHeaderGroup As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =11
+
+        HeaderBackgroundImage As image:
+            ApplyEXIFOrientation: =false
+            FocusedBorderColor: =HeaderBackgroundImage.BorderColor
+            Height: =768
+            HoverBorderColor: =ColorFade(HeaderBackgroundImage.BorderColor, 20%)
+            HoverFill: =ColorFade(HeaderBackgroundImage.Fill, 20%)
+            Image: ='login-pic'
+            ImagePosition: =ImagePosition.Fill
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =ColorFade(HeaderBackgroundImage.BorderColor, -20%)
+            PressedFill: =ColorFade(HeaderBackgroundImage.Fill, -20%)
+            Width: =850
+            ZIndex: =1
+
+        LeaveLabel As label:
+            Color: =Color.Black
+            FocusedBorderColor: =LeaveLabel.BorderColor
+            Font: =Font.Lato
+            Height: =43
+            HoverBorderColor: =LeaveLabel.BorderColor
+            HoverColor: =LeaveLabel.Color
+            HoverFill: =LeaveLabel.Fill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =LeaveLabel.BorderColor
+            PressedColor: =LeaveLabel.Color
+            PressedFill: =LeaveLabel.Fill
+            Size: =34
+            Text: ="LEAVE"
+            X: =532
+            Y: =403
+            ZIndex: =4
+
+        RequestLabel As label:
+            Color: =Color.Black
+            FocusedBorderColor: =RequestLabel.BorderColor
+            Font: =Font.Lato
+            Height: =43
+            HoverBorderColor: =RequestLabel.BorderColor
+            HoverColor: =RequestLabel.Color
+            HoverFill: =RequestLabel.Fill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =RequestLabel.BorderColor
+            PressedColor: =RequestLabel.Color
+            PressedFill: =RequestLabel.Fill
+            Size: =34
+            Text: ="REQUEST"
+            Width: =210
+            X: =265
+            Y: =402
+            ZIndex: =5
+

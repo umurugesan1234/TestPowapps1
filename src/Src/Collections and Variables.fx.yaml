@@ -1,0 +1,163 @@
+"'Collections and Variables' As screen":
+    Height: =Max(App.Height, App.DesignHeight)
+    Orientation: =If('Collections and Variables'.Width < 'Collections and Variables'.Height, Layout.Vertical, Layout.Horizontal)
+    Size: =1 + CountRows(App.SizeBreakpoints) - CountIf(App.SizeBreakpoints, Value >= 'Collections and Variables'.Width)
+    Width: =Max(App.Width, App.DesignWidth)
+
+    CDVBHeader_1 As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =6
+
+        CDVBHeaderBackground_2 As rectangle:
+            DisabledFill: =CDVBHeaderBackground_2.Fill
+            Fill: =RGBA(0, 71, 144, 1)
+            FocusedBorderColor: =CDVBHeaderBackground_2.BorderColor
+            FocusedBorderThickness: =0
+            Height: =80
+            HoverFill: =CDVBHeaderBackground_2.Fill
+            PressedFill: =CDVBHeaderBackground_2.Fill
+            Width: =1366
+            ZIndex: =1
+
+        CDVBHeaderSubTitle_1 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =CDVBHeaderSubTitle_1.BorderColor
+            Font: =Font.Lato
+            Height: =80
+            HoverBorderColor: =CDVBHeaderSubTitle_1.BorderColor
+            HoverColor: =CDVBHeaderSubTitle_1.Color
+            HoverFill: =CDVBHeaderSubTitle_1.Fill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =CDVBHeaderSubTitle_1.BorderColor
+            PressedColor: =CDVBHeaderSubTitle_1.Color
+            PressedFill: =CDVBHeaderSubTitle_1.Fill
+            Size: =18
+            Text: ="LEAVE"
+            Width: =100
+            X: =178
+            ZIndex: =2
+
+        CDVBHeaderTitle_1 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =CDVBHeaderTitle_1.BorderColor
+            Font: =Font.Lato
+            Height: =80
+            HoverBorderColor: =CDVBHeaderTitle_1.BorderColor
+            HoverColor: =CDVBHeaderTitle_1.Color
+            HoverFill: =CDVBHeaderTitle_1.Fill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =CDVBHeaderTitle_1.BorderColor
+            PressedColor: =CDVBHeaderTitle_1.Color
+            PressedFill: =CDVBHeaderTitle_1.Fill
+            Size: =18
+            Text: ="REQUEST"
+            Width: =117
+            X: =31
+            ZIndex: =3
+
+        CDVBHeaderTitle1_1 As label:
+            Align: =Align.Center
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =CDVBHeaderTitle1_1.BorderColor
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            Height: =80
+            HoverBorderColor: =CDVBHeaderTitle1_1.BorderColor
+            HoverColor: =CDVBHeaderTitle1_1.Color
+            HoverFill: =CDVBHeaderTitle1_1.Fill
+            LineHeight: =1
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =CDVBHeaderTitle1_1.BorderColor
+            PressedColor: =CDVBHeaderTitle1_1.Color
+            PressedFill: =CDVBHeaderTitle1_1.Fill
+            Size: =18
+            Text: ="Collections and Variables"
+            Width: =1366
+            ZIndex: =4
+
+    VariablesContent As htmlViewer:
+        Color: =RGBA(74, 74, 74, 1)
+        Height: =326
+        HoverBorderColor: =VariablesContent.BorderColor
+        HtmlText: |-
+            ="<div style='font-size:30px'><strong>Variables</strong></div>
+            <p><strong>_myProfile</strong> - Stores current user's Office365 profile.</p>
+            <p><strong>_defaultApprover</strong> - The currently selected leave approver.</p>
+            <p><strong>_defaultApproverPhoto</strong> - The currently selected leave approver's profile photo, if there is one.</p>
+            <p><strong>_managerView</strong> - Whether user is logged in as a manager.</p>
+            <p><strong>_requestTypeFilter</strong> - The currently selected requests gallery filter.</p>
+            <p><strong>_inclusiveTotalDaysRequested</strong> - Total days in request inclusive of end date (+ weekends + holidays)</p>
+            <p><strong>_numFullWeeks</strong> - Number of full weeks in leave period.</p>
+            <p><strong>_numFullDaysPartialWeek</strong> - Total days in remaining partial week after subtracting total full weeks from _inclusiveTotalDaysRequested.</p>
+            <p><strong>_startWeekday</strong> - Day of week the leave starts</p>
+            <p><strong>_endWeekday </strong> - Day of week the leave ends.</p>
+            <p><strong>_numPartialWeekdays</strong> - Number of weekdays in _numFullDaysPartialWeek.</p>
+            <p><strong>_workDaysInRequest</strong> - Number of work days in leave request.</p>
+            <p><strong>_holidaysInRequest</strong> - Number of holidays in leave request.</p>
+            <p><strong>_requestedDays</strong> - Number of requested days.</p>
+            <p><strong>_selectedLeaveType</strong> - The currently selected leave type.</p>
+            <p><strong>_editingRequest</strong> - Whether user is editing a request or not.</p>
+            <p><strong>_requesterBalanceRecord</strong> - Record of user's remaining balance for different leave types.</p>
+            <p><strong>_submittingRequest</strong> - Whether user is currently submitting a request. Triggers certain OnVisible functionality in ConfirmationScreen.</p>
+            <p><strong>_requestOverlapMessage</strong> - Message to display to manager if a request they are approving overlaps with others.</p>
+            <p><strong>_requester</strong> - The requester for the currently selected leave request (applicable only to manager view)</p>
+            <p><strong>_requesterPhoto</strong> - Profile photo for the requester of the currently selected leave request</p>
+            <p><strong>_managerApproved</strong> - Whether the manager approved the leave request they were viewing. Changes manager view in ConfirmationScreen.</p>
+            "
+        PaddingLeft: =20
+        PressedBorderColor: =VariablesContent.BorderColor
+        Size: =14
+        Width: =1366
+        Y: =CollectionContent.Y+CollectionContent.Height+20
+        ZIndex: =7
+
+    CollectionContent As htmlViewer:
+        Color: =RGBA(74, 74, 74, 1)
+        Height: =342
+        HoverBorderColor: =CollectionContent.BorderColor
+        HtmlText: |-
+            ="<div style='font-size:30px'><strong>Collections</strong></div>
+            <p><strong>LeaveTypeCollection - </strong>List of all the Leave Types in the app.  It includes the leave type descriptions, leave type icons, and leave type name. " & 
+            "<p><strong>RequesterBalanceCollection - </strong>Stores current user's leave balace value for each leave type. It includes the leave type and remaining balance values.</p>" & 
+            "<p><strong>RequestEdit - </strong>Stores current employee's seleted leave request item from the home screen, the value will change when an employee updates the Date, Approver, or Leave Type.</p>" &
+            "<p><strong>RequestEditTemp - </strong>Temp version of RequestEdit that does not contain the total requested workdays for the absence period.</p>" &
+            "<p><strong>RequestOverlaps - </strong>Stores leave requests overlaps to display when a manager enters the leave request detail screen.</p>" &
+            "<p><strong>EmailTemplate - </strong>Collection of the email templates that get sent to a manager/user when a new leave request is created</p>" &
+            "<p><strong>TemplateData - </strong>Collection of data specific to the current user's leave request</p>"
+        PaddingLeft: =20
+        PressedBorderColor: =CollectionContent.BorderColor
+        Size: =14
+        Width: =1366
+        Y: =80
+        ZIndex: =8
+
+    icon5_10 As icon.ArrowRight:
+        Color: =Color.White
+        DisabledFill: =icon5_10.Fill
+        DisplayMode: =DisplayMode.View
+        FocusedBorderColor: =icon5_10.BorderColor
+        FocusedBorderThickness: =0
+        HoverBorderColor: =ColorFade(icon5_10.BorderColor, 20%)
+        HoverColor: =ColorFade(icon5_10.Color, 20%)
+        HoverFill: =icon5_10.Fill
+        Icon: =Icon.ArrowRight
+        PressedBorderColor: =ColorFade(icon5_10.BorderColor, -20%)
+        PressedColor: =ColorFade(icon5_10.Color, -20%)
+        PressedFill: =icon5_10.Fill
+        Width: =32
+        X: =143 + 0
+        Y: =9 + 0
+        ZIndex: =9
+

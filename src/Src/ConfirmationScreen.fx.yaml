@@ -1,0 +1,423 @@
+ConfirmationScreen As screen:
+    Height: =Max(App.Height, App.DesignHeight)
+    OnHidden: =Set(_showDetails, false)
+    OnVisible: |-
+        =If(
+            _submittingRequest,
+            Concurrent(
+                Set(
+                    _navMenuSelect,
+                    ""
+                ),
+                //if editing a request, revise the record that is being edited, otherwise create a new one 
+                Patch(
+                    LeaveCollection,
+                    If(
+                        _editingRequest,
+                        LookUp(
+                            LeaveCollection,
+                            LeaveID = GalleryRequests.Selected.LeaveID
+                        ),
+                        Defaults(LeaveCollection)
+                    ),
+                    {
+                        Title: TextInput1.Text,
+                        Detail: TextInput1_1.Text,
+                        StartDate: LeaveStartDatePicker.SelectedDate,
+                        EndDate: LeaveEndDatePicker.SelectedDate,
+                        LeaveType: _selectedLeaveType,
+                        Approver: _selectedApprover.UserPrincipalName,
+                        Status: "Pending",
+                        Requester: _myProfile.UserPrincipalName,
+                        LeaveID: If(
+                            _editingRequest,
+                            GalleryRequests.Selected.LeaveID,
+                            Text(
+                                Now(),
+                                DateTimeFormat.LongDateTime24
+                            ) & _myProfile.UserPrincipalName
+                        )
+                    }
+                ),
+            //create email template data specific to the request
+                ClearCollect(
+                    TemplateData,
+                    {
+                        Field: "{SubmitterName}",
+                        Data: _myProfile.DisplayName
+                    },
+                    {
+                        Field: "{LeaveType}",
+                        Data: _selectedLeaveType
+                    },
+                    {
+                        Field: "{LeaveTitle}",
+                        Data: TextInput1.Text
+                    },
+                    {
+                        Field: "{LeaveDescript}",
+                        Data: TextInput1_1.Text
+                    },
+                    {
+                        Field: "{LeaveStart}",
+                        Data: Text(
+                            LeaveStartDatePicker.SelectedDate,
+                            "[$-en-US]mmm. dd, yyyy"
+                        )
+                    },
+                    {
+                        Field: "{LeaveEnd}",
+                        Data: Text(
+                            LeaveEndDatePicker.SelectedDate,
+                            "[$-en-US]mmm. dd, yyyy"
+                        )
+                    }
+                )
+            );
+            //substitute template data values for placeholder
+        ForAll(
+                TemplateData,
+                Patch(
+                    EmailTemplate,
+                    First(EmailTemplate),
+                    {
+                        Value: Substitute(
+                            First(EmailTemplate).Value,
+                            Field,
+                            Data
+                        )
+                    }
+                )
+            );
+            //send email with email template
+        If(
+                _sendEmailsEnabled,
+                Office365.SendEmailV2(
+                    _selectedApprover.UserPrincipalName,
+                    "New Leave Request",
+                    First(EmailTemplate).Value,
+                    {Importance: "Normal"}
+                )
+            );
+            //reset all user nput fields
+        Set(
+                _submittingRequest,
+                false
+            );
+            Set(
+                _leaveStart,
+                Today()
+            );
+            Set(
+                _leaveEnd,
+                Today()
+            );
+            Set(
+                _leaveTitle,
+                ""
+            );
+            Set(
+                _leaveDetail,
+                ""
+            );
+            Set(
+                _selectedLeaveType,
+                Blank()
+            );
+            Reset(TextInput1);
+            Reset(TextInput1_1);
+             //reset email template to placeholder values when finished (see phone version for an alternate method of doing this)
+        ClearCollect(
+                EmailTemplate,
+                "<html>
+                    <head>
+                        <meta http-equiv=""Content-Type"" content=""text/html; charset=us-ascii"">
+                    </head>
+                    <body>
+                    <p>
+                    There is a leave request from:  {SubmitterName}  pending your approval. <ul><li>Type:  {LeaveType}</li><li>Title: {LeaveTitle}</li><li>Description: {LeaveDescript}</li><li>Start Date: {LeaveStart}</li><li>End Date: {LeaveEnd}</li>" & "</p>
+                    </body>
+                    </html>"
+            );
+            
+        )
+    Orientation: =If(ConfirmationScreen.Width < ConfirmationScreen.Height, Layout.Vertical, Layout.Horizontal)
+    Size: =1 + CountRows(App.SizeBreakpoints) - CountIf(App.SizeBreakpoints, Value >= ConfirmationScreen.Width)
+    Width: =Max(App.Width, App.DesignWidth)
+
+    Rectangle7 As rectangle:
+        AccessibleLabel: ="Select to navigate back to home page"
+        DisabledFill: =Rectangle7.Fill
+        Fill: =RGBA(0,0,0,0)
+        FocusedBorderColor: =Rectangle7.BorderColor
+        Height: =688
+        HoverFill: =Rectangle7.Fill
+        OnSelect: =Navigate(HomeScreen, BorderStyle.None)
+        PressedFill: =Rectangle7.Fill
+        Width: =905
+        X: =203
+        Y: =80
+        ZIndex: =1
+
+    Rectangle3_5 As rectangle:
+        AccessibleLabel: ="background rectangle"
+        DisabledFill: =Rectangle3_5.Fill
+        Fill: =RGBA(249, 249, 249, 1)
+        FocusedBorderColor: =Rectangle3_5.BorderColor
+        Height: =695
+        HoverFill: =Rectangle3_5.Fill
+        OnSelect: =Navigate(HomeScreen, BorderStyle.None)
+        PressedFill: =Rectangle3_5.Fill
+        Width: =230
+        X: =1136
+        Y: =73
+        ZIndex: =3
+
+    RectNavSep_4 As rectangle:
+        DisabledFill: =RectNavSep_4.Fill
+        Fill: =RGBA(204, 204, 204, 1)
+        FocusedBorderColor: =RectNavSep_4.BorderColor
+        Height: =688
+        HoverFill: =RectNavSep_4.Fill
+        PressedFill: =RectNavSep_4.Fill
+        Width: =1
+        X: =231
+        Y: =80
+        ZIndex: =11
+
+    Header_5 As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =11
+
+        Rectangle1_5 As rectangle:
+            DisabledFill: =Rectangle1_5.Fill
+            Fill: =RGBA(0, 71, 144, 1)
+            FocusedBorderColor: =Rectangle1_5.BorderColor
+            Height: =80
+            HoverFill: =Rectangle1_5.Fill
+            PressedFill: =Rectangle1_5.Fill
+            Width: =1366
+            ZIndex: =4
+
+        LblHeaderTItle1_5 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =LblHeaderTItle1_5.BorderColor
+            Font: =Font.Lato
+            Height: =80
+            HoverBorderColor: =LblHeaderTItle1_5.BorderColor
+            HoverColor: =LblHeaderTItle1_5.Color
+            HoverFill: =LblHeaderTItle1_5.Fill
+            PressedBorderColor: =LblHeaderTItle1_5.BorderColor
+            PressedColor: =LblHeaderTItle1_5.Color
+            PressedFill: =LblHeaderTItle1_5.Fill
+            Size: =18
+            Text: =Upper("Request")
+            Width: =117
+            X: =30
+            ZIndex: =5
+
+        LblHeaderTitle2_5 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =LblHeaderTitle2_5.BorderColor
+            Height: =80
+            HoverBorderColor: =LblHeaderTitle2_5.BorderColor
+            HoverColor: =LblHeaderTitle2_5.Color
+            HoverFill: =LblHeaderTitle2_5.Fill
+            PressedBorderColor: =LblHeaderTitle2_5.BorderColor
+            PressedColor: =LblHeaderTitle2_5.Color
+            PressedFill: =LblHeaderTitle2_5.Fill
+            Size: =18
+            Text: =Upper("Leave")
+            Width: =138
+            X: =178
+            ZIndex: =6
+
+        icon2_5 As icon.ArrowRight:
+            Color: =Color.White
+            DisabledFill: =icon2_5.Fill
+            FocusedBorderColor: =icon2_5.BorderColor
+            HoverBorderColor: =ColorFade(icon2_5.BorderColor, 20%)
+            HoverColor: =ColorFade(icon2_5.Color, 20%)
+            HoverFill: =icon2_5.Fill
+            Icon: =Icon.ArrowRight
+            PressedBorderColor: =ColorFade(icon2_5.BorderColor, -20%)
+            PressedColor: =ColorFade(icon2_5.Color, -20%)
+            PressedFill: =icon2_5.Fill
+            Width: =32
+            X: =143
+            Y: =9
+            ZIndex: =7
+
+        CircleHeaderCreateNew_4 As circle:
+            DisabledFill: =CircleHeaderCreateNew_4.Fill
+            Fill: =Color.White
+            FocusedBorderColor: =CircleHeaderCreateNew_4.BorderColor
+            Height: =46
+            HoverFill: =CircleHeaderCreateNew_4.Fill
+            PressedFill: =CircleHeaderCreateNew_4.Fill
+            Width: =46
+            X: =1155
+            Y: =17
+            ZIndex: =8
+
+        IconHeaderCreateNew_4 As icon.Add:
+            AccessibleLabel: ="Create new leave request"
+            Color: =Rectangle1_5.Fill
+            DisabledFill: =IconHeaderCreateNew_4.Fill
+            FocusedBorderColor: =IconHeaderCreateNew_4.BorderColor
+            Height: =46
+            HoverBorderColor: =ColorFade(IconHeaderCreateNew_4.BorderColor, 20%)
+            HoverColor: =ColorFade(IconHeaderCreateNew_4.Color, 20%)
+            HoverFill: =IconHeaderCreateNew_4.Fill
+            Icon: =Icon.Add
+            OnSelect: |-
+                =Navigate(NewRequestScreen, BorderStyle.None); 
+                Set(_selectedLeaveType,Blank());
+                Set(_editingRequest, false);
+            PaddingBottom: =7
+            PaddingLeft: =7
+            PaddingRight: =7
+            PaddingTop: =7
+            PressedBorderColor: =ColorFade(IconHeaderCreateNew_4.BorderColor, -20%)
+            PressedColor: =ColorFade(IconHeaderCreateNew_4.Color, -20%)
+            PressedFill: =IconHeaderCreateNew_4.Fill
+            TabIndex: =0
+            Width: =46
+            X: =CircleHeaderCreateNew_4.X
+            Y: =CircleHeaderCreateNew_4.Y
+            ZIndex: =9
+
+        LblHeaderCreateNew_4 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =LblHeaderCreateNew_4.BorderColor
+            FocusedBorderThickness: =02
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            Height: =80
+            HoverBorderColor: =LblHeaderCreateNew_4.BorderColor
+            HoverColor: =LblHeaderCreateNew_4.Color
+            HoverFill: =LblHeaderCreateNew_4.Fill
+            OnSelect: =
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =LblHeaderCreateNew_4.BorderColor
+            PressedColor: =LblHeaderCreateNew_4.Color
+            PressedFill: =LblHeaderCreateNew_4.Fill
+            Size: =13.5
+            Text: ="Create Request"
+            Width: =155
+            X: =1211
+            ZIndex: =10
+
+    icon4 As icon.Check:
+        AccessibleLabel: ="Success"
+        Color: =RGBA(0, 128, 0, 1)
+        DisabledFill: =icon4.Fill
+        FocusedBorderColor: =icon4.BorderColor
+        Height: =130
+        HoverBorderColor: =ColorFade(icon4.BorderColor, 20%)
+        HoverColor: =ColorFade(icon4.Color, 20%)
+        HoverFill: =icon4.Fill
+        Icon: =Icon.Check
+        OnSelect: =Navigate(HomeScreen, BorderStyle.None)
+        PressedBorderColor: =ColorFade(icon4.BorderColor, -20%)
+        PressedColor: =ColorFade(icon4.Color, -20%)
+        PressedFill: =icon4.Fill
+        Visible: =!_submittingRequest
+        Width: =130
+        X: =Parent.Width/2 - icon4.Width/2
+        Y: =Parent.Height/2 - icon4.Height/2
+        ZIndex: =12
+
+    LblRequestSubmitted As label:
+        Align: =LayoutAlignItems.Center
+        FocusedBorderColor: =LblRequestSubmitted.BorderColor
+        FocusedBorderThickness: =2
+        Font: =Font.Lato
+        FontWeight: =FontWeight.Semibold
+        HoverBorderColor: =LblRequestSubmitted.BorderColor
+        HoverColor: =LblRequestSubmitted.Color
+        HoverFill: =LblRequestSubmitted.Fill
+        Live: =Live.Polite
+        OnSelect: =Navigate(HomeScreen, BorderStyle.None)
+        PressedBorderColor: =LblRequestSubmitted.BorderColor
+        PressedColor: =LblRequestSubmitted.Color
+        PressedFill: =LblRequestSubmitted.Fill
+        Size: =13.5
+        Text: ="Your request " & If(_submittingRequest, "is being processed...", "has been submitted")
+        Width: =350
+        X: =Parent.Width/2 - LblRequestSubmitted.Width / 2
+        Y: =484
+        ZIndex: =13
+
+    GalleryNavigation_5 As gallery.galleryVertical:
+        AccessibleLabel: ="Select a gallery item to navigate to it's respective page"
+        DisabledBorderColor: =GalleryNavigation_5.BorderColor
+        DisabledFill: =GalleryNavigation_5.Fill
+        Fill: =RGBA(249, 249, 249, 1)
+        Height: =688
+        HoverBorderColor: =GalleryNavigation_5.BorderColor
+        HoverFill: =GalleryNavigation_5.Fill
+        Items: |
+            =If(_managerView, ManagerNavigation, EmployeeNavigation)
+        Layout: =Layout.Vertical
+        LoadingSpinnerColor: =GalleryNavigation_5.BorderColor
+        OnSelect: |-
+            =Set(_navMenuSelect, ThisItem.MenuItem);
+            If(
+                "Requests" in ThisItem.MenuItem, Navigate(HomeScreen, BorderStyle.None),
+                "Balance" in ThisItem.MenuItem, Navigate(LeaveBalanceScreen, BorderStyle.None),
+                "Holidays" in ThisItem.MenuItem, Navigate(CompanyHolidaysScreen, BorderStyle.None),
+                ThisItem.MenuItem = "About", Navigate(AboutScreen, BorderStyle.None),
+                ThisItem.MenuItem = "Log out", Navigate(LoginScreen, BorderStyle.None)
+            )
+        PressedBorderColor: =GalleryNavigation_5.BorderColor
+        PressedFill: =GalleryNavigation_5.Fill
+        ShowScrollbar: =false
+        TemplateFill: =If(ThisItem.MenuItem = _navMenuSelect, RGBA(255,255,255,1), RGBA(245,245,245,1))
+        TemplatePadding: =0
+        TemplateSize: =72
+        Width: =231
+        Y: =80
+        ZIndex: =14
+
+        LeftMenuSeparator_5 As rectangle:
+            AccessibleLabel: =ThisItem.MenuItem
+            DisabledFill: =LeftMenuSeparator_5.Fill
+            Fill: =RGBA(205, 205, 205, 1)
+            FocusedBorderColor: =LeftMenuSeparator_5.BorderColor
+            Height: =1
+            HoverFill: =LeftMenuSeparator_5.Fill
+            OnSelect: =Select(Parent)
+            PressedFill: =LeftMenuSeparator_5.Fill
+            Width: =GalleryNavigation_5.TemplateWidth
+            Y: =Parent.TemplateHeight - LeftMenuSeparator_5.Height
+            ZIndex: =1
+
+        Label2_5 As label:
+            Align: =TextPosition.Left
+            Color: =If(ThisItem.MenuItem = _navMenuSelect, RGBA(47,41,43,1), RGBA(10,100,204,1))
+            FocusedBorderColor: =Label2_5.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            HoverBorderColor: =Label2_5.BorderColor
+            HoverColor: =Label2_5.Color
+            HoverFill: =Label2_5.Fill
+            OnSelect: =Select(Parent)
+            PaddingLeft: =30
+            PressedBorderColor: =Label2_5.BorderColor
+            PressedColor: =Label2_5.Color
+            PressedFill: =Label2_5.Fill
+            Size: =13.5
+            TabIndex: =0
+            Text: =ThisItem.MenuItem
+            Width: =231
+            ZIndex: =2
+

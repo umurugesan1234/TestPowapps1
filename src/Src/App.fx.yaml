@@ -1,0 +1,120 @@
+App As appinfo:
+    BackEnabled: =false
+    OnError: =
+    OnStart: |-
+        =Set(_sendEmailsEnabled, false);
+        
+        Concurrent(
+            //collection used in the left nav menu
+            ClearCollect(EmployeeNavigation,
+            {MenuItem: "My Leave Requests"},
+            {MenuItem: "My Leave Balance"},
+            {MenuItem: "Company Holidays"},
+            {MenuItem: "About"},
+            {MenuItem: "Log out"}),
+        
+            //collection used in the left nav menu
+            ClearCollect(ManagerNavigation,
+            {MenuItem: "Leave Requests"},
+            {MenuItem: "Company Holidays"},
+            {MenuItem: "About"},
+            {MenuItem: "Log out"}),
+        
+            //add custom leave types to this collection to make them show up in the app
+            ClearCollect(
+            LeaveTypeCollection, 
+                Table(
+                        {
+                            type:"Vacation", 
+                            icon:vacation,
+                            iconselected:'vacation-selected',
+                            description:
+                            "Vacation leave is provided to all employees for the purpose of rest, relaxation, and to attend to personal affairs. Vacation balance is acquired over time and can be used at any time."
+                        }
+                        ,
+                        {
+                            type:"Sick Leave", 
+                            icon:'sick-leave', 
+                            iconselected:'sick-leave-selected',
+                            description:"Sick leave may be used for your own illness or medical/dental appointments or for the illness or medical/dental appointments of family members. Sick leave can also be used to address the psychological, physical, or legal aspects of domestic violence, sexual assault, stalking, or other crime. You may not use sick leave for vacation purposes. Some cities and states have specific laws governing sick leave that allow use of sick leave to care for other family members."
+                        }
+                            ,
+                        {
+                            type:"Floating Holiday", 
+                            icon: 'floating-holiday', 
+                            iconselected:'floating-holiday-selected',
+                            description:"As a regular employee working full time, you receive eight floating holidays at the beginning of each calendar year. Please obtain your manager's approval prior to scheduling your floating holidays (one floating holiday equals eight hours for full-time employees). As a regular employee working part-time, you will receive the equivalent of eight floating holidays at the beginning of each calendar year in accordance with your reduced work schedule. If you were hired on or after October 16, you will not receive floating holidays for that calendar year. You will receive eight floating holidays in January of the following calendar year. If your floating holidays are not used within the current calendar year, they are forfeited. Unless required by state law, unused floating holidays are not cashed out at termination."
+                        }
+                            ,
+                        {
+                            type:"Jury Duty", 
+                            icon: 'jury-duty', 
+                            iconselected:'jury-duty-selected',
+                            description:"If you are summoned for jury duty or subpoenaed as a trial witness in a federal or state court in the United States or its territories, or in a suit to which the company is a party, you will be granted paid time away from work for the time that you are required to devote to jury service or being a trial witness, (for hourly employees, up to eight hours in a day). Regular employees working part-time will be eligible for paid time away in accordance with their part-time work schedules. You may keep all jury-duty–related compensation paid to you (for example, parking reimbursements or payments for jury duty)."
+                        }
+                            ,
+                        {
+                            type:"Bereavement", 
+                            icon: bereavement, 
+                            iconselected:'bereavement-selected',
+                            description:"Regular employees may take paid time away from work in the event of the death to attend the funeral (or alternative to a funeral), make arrangements necessitated by the death of a family member or grieve the death of a family member. Bereavement leave for a family member may be taken as follows: Employees may take up to 5 work/business days in the event of a death of an immediate family member broadly including a spouse, domestic partner, custodial parent, non-custodial parent, adoptive parent, foster parent, biological parent, parent-in-law, parent of domestic partner, sibling, grandparent or grandchild of the employee, or a person with whom the employee is or was in a relationship of in loco parentis. The term also includes the biological, adopted, legal ward, foster or step child of an employee or the child of an employee's domestic partner."
+                        }
+                    )
+            ),
+            //defines leave start and end for requests. Default set to Now since most users will be creating new requests. Changes to reflect leave times for requests which are being edited
+            Set(_leaveStart,Now()),
+            Set(_leaveEnd,Now()),
+            Set(_myProfile,Office365Users.MyProfile()),
+            ClearCollect(EmailTemplate,
+                "<html>
+        
+                <head>
+                    <meta http-equiv=""Content-Type"" content=""text/html; charset=us-ascii"">
+                </head>
+        
+                <body>
+                <p>
+                There is a leave request from:  {SubmitterName}  pending your approval. <ul><li>Type:  {LeaveType}</li><li>Title: {LeaveTitle}</li><li>Description: {LeaveDescript}</li><li>Start Date: {LeaveStart}</li><li>End Date: {LeaveEnd}</li>" &
+                "</p>
+                </body>
+                </html>"
+            ),
+            ClearCollect(HolidaysCollection, 
+             {HolidayName: "Thanksgiving", StartDate: DateValue("11/22/2018")}, 
+             {HolidayName: "Day after Thanksgiving", StartDate: DateValue("11/23/2018")}, 
+             {HolidayName: "Christmas", StartDate: DateValue("12/25/2018")}, 
+             {HolidayName: "DayAfterChristmas", StartDate: DateValue("12/26/2018")}, 
+             {HolidayName: "New Year's Day", StartDate: DateValue("1/1/2019")})
+        );
+        
+        
+        ClearCollect(LeaveCollection, 
+             {Title: "Vacation", Detail: "Example vacation request", StartDate: Today(), EndDate: DateAdd(Today(), 6, TimeUnit.Days), LeaveType: "Vacation", Requester: _myProfile.UserPrincipalName, Approver: _myProfile.UserPrincipalName, 
+             Status: "Pending", LeaveID: _myProfile.UserPrincipalName&Text(Now(), "[$-en-US]mm-dd-yyyy-hh-mm-ss-fff")});
+        
+        ClearCollect(BalanceCollection,
+                {
+                    EmployeeEmail: _myProfile.UserPrincipalName, 
+                    EmployeeName: _myProfile.DisplayName , 
+                    Year: Text(Year(Now())), 
+                    Vacation:10, 
+                    VacationUsed:0, 
+                    Sick:8, 
+                    SickUsed:0, 
+                    Floating:8, 
+                    FloatingUsed:0, 
+                    JuryDuty:3, 
+                    JuryDutyUsed:0, 
+                    Bereavement:5, 
+                    BereavementUsed:0, 
+                    BalanceID:_myProfile.UserPrincipalName&Text(Now(), "[$-en-US]mm-dd-yyyy-hh-mm-ss-fff")
+                }
+        )
+
+    Host As hostControl.DefaultHostControlVariant:
+        OnCancel: =false
+        OnEdit: =false
+        OnNew: =false
+        OnSave: =false
+        OnView: =false
+

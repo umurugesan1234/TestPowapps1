@@ -1,0 +1,393 @@
+LeaveBalanceScreen As screen:
+    Height: =Max(App.Height, App.DesignHeight)
+    OnHidden: =Set(_showDetails, false)
+    OnVisible: |-
+        =Concurrent(
+            Set(_navMenuSelect, "My Leave Balance"),
+            ClearCollect(RequesterBalanceCollection, 
+            { type: "Vacation", balance: Value(_requesterBalanceRecord.Vacation) - Value(_requesterBalanceRecord.VacationUsed)},
+            {type:"Sick Leave", balance:Value(_requesterBalanceRecord.Sick)-Value(_requesterBalanceRecord.SickUsed)},
+            {type:"Floating Holiday", balance:Value(_requesterBalanceRecord.Floating)-Value(_requesterBalanceRecord.FloatingUsed)},
+            {type:"Jury Duty", balance:Value(_requesterBalanceRecord.JuryDuty)-Value(_requesterBalanceRecord.JuryDutyUsed)},
+            {type:"Bereavement", balance:Value(_requesterBalanceRecord.Bereavement)-Value(_requesterBalanceRecord.BereavementUsed)}
+           )
+        )
+    Orientation: =If(LeaveBalanceScreen.Width < LeaveBalanceScreen.Height, Layout.Vertical, Layout.Horizontal)
+    Size: =1 + CountRows(App.SizeBreakpoints) - CountIf(App.SizeBreakpoints, Value >= LeaveBalanceScreen.Width)
+    Width: =Max(App.Width, App.DesignWidth)
+
+    Rectangle3_4 As rectangle:
+        DisabledFill: =Rectangle3_4.Fill
+        Fill: =RGBA(249, 249, 249, 1)
+        FocusedBorderColor: =Rectangle3_4.BorderColor
+        Height: =695
+        HoverFill: =Rectangle3_4.Fill
+        PressedFill: =Rectangle3_4.Fill
+        Width: =230
+        X: =1136
+        Y: =73
+        ZIndex: =3
+
+    Header_4 As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =11
+
+        Rectangle1_4 As rectangle:
+            DisabledFill: =Rectangle1_4.Fill
+            Fill: =RGBA(0, 71, 144, 1)
+            FocusedBorderColor: =Rectangle1_4.BorderColor
+            Height: =80
+            HoverFill: =Rectangle1_4.Fill
+            PressedFill: =Rectangle1_4.Fill
+            Width: =1366
+            ZIndex: =4
+
+        LblHeaderTItle1_4 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =LblHeaderTItle1_4.BorderColor
+            Font: =Font.Lato
+            Height: =80
+            HoverBorderColor: =LblHeaderTItle1_4.BorderColor
+            HoverColor: =LblHeaderTItle1_4.Color
+            HoverFill: =LblHeaderTItle1_4.Fill
+            PressedBorderColor: =LblHeaderTItle1_4.BorderColor
+            PressedColor: =LblHeaderTItle1_4.Color
+            PressedFill: =LblHeaderTItle1_4.Fill
+            Size: =18
+            Text: =Upper("Request")
+            Width: =117
+            X: =30
+            ZIndex: =5
+
+        LblHeaderTitle2_4 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =LblHeaderTitle2_4.BorderColor
+            Height: =80
+            HoverBorderColor: =LblHeaderTitle2_4.BorderColor
+            HoverColor: =LblHeaderTitle2_4.Color
+            HoverFill: =LblHeaderTitle2_4.Fill
+            PressedBorderColor: =LblHeaderTitle2_4.BorderColor
+            PressedColor: =LblHeaderTitle2_4.Color
+            PressedFill: =LblHeaderTitle2_4.Fill
+            Size: =18
+            Text: =Upper("Leave")
+            Width: =138
+            X: =178
+            ZIndex: =6
+
+        icon2_4 As icon.ArrowRight:
+            Color: =Color.White
+            DisabledFill: =icon2_4.Fill
+            FocusedBorderColor: =icon2_4.BorderColor
+            HoverBorderColor: =ColorFade(icon2_4.BorderColor, 20%)
+            HoverColor: =ColorFade(icon2_4.Color, 20%)
+            HoverFill: =icon2_4.Fill
+            Icon: =Icon.ArrowRight
+            PressedBorderColor: =ColorFade(icon2_4.BorderColor, -20%)
+            PressedColor: =ColorFade(icon2_4.Color, -20%)
+            PressedFill: =icon2_4.Fill
+            Width: =32
+            X: =143
+            Y: =9
+            ZIndex: =7
+
+        CircleHeaderCreateNew_3 As circle:
+            DisabledFill: =CircleHeaderCreateNew_3.Fill
+            Fill: =Color.White
+            FocusedBorderColor: =CircleHeaderCreateNew_3.BorderColor
+            Height: =46
+            HoverFill: =CircleHeaderCreateNew_3.Fill
+            PressedFill: =CircleHeaderCreateNew_3.Fill
+            Width: =46
+            X: =1155
+            Y: =17
+            ZIndex: =8
+
+        IconHeaderCreateNew_3 As icon.Add:
+            AccessibleLabel: ="Create new leave request"
+            Color: =Rectangle1_4.Fill
+            DisabledFill: =IconHeaderCreateNew_3.Fill
+            FocusedBorderColor: =IconHeaderCreateNew_3.BorderColor
+            Height: =46
+            HoverBorderColor: =ColorFade(IconHeaderCreateNew_3.BorderColor, 20%)
+            HoverColor: =ColorFade(IconHeaderCreateNew_3.Color, 20%)
+            HoverFill: =IconHeaderCreateNew_3.Fill
+            Icon: =Icon.Add
+            OnSelect: |
+                =Navigate(NewRequestScreen, BorderStyle.None);
+                Set(_selectedLeaveType,Blank());
+                Set(_editingRequest, false)
+            PaddingBottom: =7
+            PaddingLeft: =7
+            PaddingRight: =7
+            PaddingTop: =7
+            PressedBorderColor: =ColorFade(IconHeaderCreateNew_3.BorderColor, -20%)
+            PressedColor: =ColorFade(IconHeaderCreateNew_3.Color, -20%)
+            PressedFill: =IconHeaderCreateNew_3.Fill
+            TabIndex: =0
+            Width: =46
+            X: =CircleHeaderCreateNew_3.X
+            Y: =CircleHeaderCreateNew_3.Y
+            ZIndex: =9
+
+        LblHeaderCreateNew_3 As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =LblHeaderCreateNew_3.BorderColor
+            FocusedBorderThickness: =02
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            Height: =80
+            HoverBorderColor: =LblHeaderCreateNew_3.BorderColor
+            HoverColor: =LblHeaderCreateNew_3.Color
+            HoverFill: =LblHeaderCreateNew_3.Fill
+            OnSelect: =
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =LblHeaderCreateNew_3.BorderColor
+            PressedColor: =LblHeaderCreateNew_3.Color
+            PressedFill: =LblHeaderCreateNew_3.Fill
+            Size: =13.5
+            Text: ="Create Request"
+            Width: =155
+            X: =1211
+            ZIndex: =10
+
+    RectNavSep_3 As rectangle:
+        DisabledFill: =RectNavSep_3.Fill
+        Fill: =RGBA(204, 204, 204, 1)
+        FocusedBorderColor: =RectNavSep_3.BorderColor
+        Height: =688
+        HoverFill: =RectNavSep_3.Fill
+        PressedFill: =RectNavSep_3.Fill
+        Width: =1
+        X: =231
+        Y: =80
+        ZIndex: =30
+
+    GalleryLeaveBalance As gallery.galleryVertical:
+        AccessibleLabel: ="Leave balance gallery"
+        DisabledBorderColor: =GalleryLeaveBalance.BorderColor
+        DisabledFill: =GalleryLeaveBalance.Fill
+        Height: =688
+        HoverBorderColor: =GalleryLeaveBalance.BorderColor
+        HoverFill: =GalleryLeaveBalance.Fill
+        Items: =RequesterBalanceCollection
+        Layout: =Layout.Vertical
+        LoadingSpinnerColor: =GalleryLeaveBalance.BorderColor
+        PressedBorderColor: =GalleryLeaveBalance.BorderColor
+        PressedFill: =GalleryLeaveBalance.Fill
+        ShowScrollbar: =false
+        TemplatePadding: =20
+        TemplateSize: =290
+        Width: =885
+        WrapCount: =4
+        X: =241
+        Y: =80
+        ZIndex: =31
+
+        Rectangle6 As rectangle:
+            AccessibleLabel: =ThisItem.type
+            BorderColor: =RGBA(10, 106, 204, 1)
+            BorderThickness: =1
+            DisabledFill: =Rectangle6.Fill
+            Fill: =RGBA(62,96,170,0)
+            FocusedBorderColor: =Rectangle6.BorderColor
+            Height: =290
+            HoverFill: =Rectangle6.Fill
+            OnSelect: =
+            PressedFill: =Rectangle6.Fill
+            Width: =196.25
+            ZIndex: =1
+
+        Image3 As image:
+            AccessibleLabel: =ThisItem.type
+            FocusedBorderColor: =Image3.BorderColor
+            Height: =40
+            HoverBorderColor: =ColorFade(Image3.BorderColor, 20%)
+            HoverFill: =ColorFade(Image3.Fill, 20%)
+            Image: =LookUp(LeaveTypeCollection, type = ThisItem.type).icon
+            OnSelect: =Select(Parent)
+            PressedBorderColor: =ColorFade(Image3.BorderColor, -20%)
+            PressedFill: =ColorFade(Image3.Fill, -20%)
+            Width: =40
+            X: =Parent.TemplateWidth/2 - Image3.Width/2
+            Y: =30
+            ZIndex: =2
+
+        Label16 As label:
+            Align: =LayoutAlignItems.Center
+            FocusedBorderColor: =Label16.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =Label16.BorderColor
+            HoverColor: =Label16.Color
+            HoverFill: =Label16.Fill
+            Live: =Live.Polite
+            OnSelect: =Select(Parent)
+            PressedBorderColor: =Label16.BorderColor
+            PressedColor: =Label16.Color
+            PressedFill: =Label16.Fill
+            Size: =18
+            Text: =ThisItem.type
+            Width: =Parent.TemplateWidth
+            Y: =83
+            ZIndex: =3
+
+        Label17 As label:
+            Align: =LayoutAlignItems.Center
+            FocusedBorderColor: =Label17.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.'Lato Light'
+            Height: =48
+            HoverBorderColor: =Label17.BorderColor
+            HoverColor: =Label17.Color
+            HoverFill: =Label17.Fill
+            Live: =Live.Polite
+            OnSelect: =Select(Parent)
+            PressedBorderColor: =Label17.BorderColor
+            PressedColor: =Label17.Color
+            PressedFill: =Label17.Fill
+            Size: =27
+            Text: =Text(ThisItem.balance) & If(Abs(ThisItem.balance)=1, " day", " days")
+            Width: =Parent.TemplateWidth
+            Y: =137
+            ZIndex: =4
+
+        Label18 As label:
+            Align: =LayoutAlignItems.Center
+            FocusedBorderColor: =Label18.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            Height: =32
+            HoverBorderColor: =Label18.BorderColor
+            HoverColor: =Label18.Color
+            HoverFill: =Label18.Fill
+            Live: =Live.Polite
+            OnSelect: =Select(Parent)
+            PressedBorderColor: =Label18.BorderColor
+            PressedColor: =Label18.Color
+            PressedFill: =Label18.Fill
+            Size: =12
+            Text: ="available"
+            Width: =Parent.TemplateWidth
+            Y: =185
+            ZIndex: =5
+
+        icon3 As icon.Information:
+            AccessibleLabel: =ThisItem.type & " more info, " & ThisItem.balance & If(Abs(ThisItem.balance) = 1, " day", " days") & " available"
+            Color: =RGBA(10, 106, 204, 1)
+            DisabledFill: =icon3.Fill
+            FocusedBorderColor: =icon3.BorderColor
+            Height: =20
+            HoverBorderColor: =ColorFade(icon3.BorderColor, 20%)
+            HoverColor: =ColorFade(icon3.Color, 20%)
+            HoverFill: =icon3.Fill
+            Icon: =Icon.Information
+            OnSelect: |
+                =Set(_aboutSelectedLeaveType, ThisItem.type); Navigate(AboutScreen, BorderStyle.None)
+            PressedBorderColor: =ColorFade(icon3.BorderColor, -20%)
+            PressedColor: =ColorFade(icon3.Color, -20%)
+            PressedFill: =icon3.Fill
+            TabIndex: =1
+            Width: =20
+            X: =171
+            Y: =10
+            ZIndex: =6
+
+        Label19 As label:
+            Align: =LayoutAlignItems.Center
+            Color: =RGBA(10, 106, 204, 1)
+            FocusedBorderColor: =Label19.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =Label19.BorderColor
+            HoverColor: =Label19.Color
+            HoverFill: =Label19.Fill
+            OnSelect: |
+                =Set(_selectedLeaveType, ThisItem.type);
+                Set(_editingRequest, false);
+                Navigate(NewRequestScreen, BorderStyle.None);
+            PressedBorderColor: =Label19.BorderColor
+            PressedColor: =Label19.Color
+            PressedFill: =Label19.Fill
+            Size: =12
+            TabIndex: =0
+            Text: ="+ Request leave"
+            X: =23
+            Y: =235
+            ZIndex: =7
+
+    GalleryNavigation_4 As gallery.galleryVertical:
+        AccessibleLabel: ="Select a gallery item to navigate to it's respective page"
+        DisabledBorderColor: =GalleryNavigation_4.BorderColor
+        DisabledFill: =GalleryNavigation_4.Fill
+        Fill: =RGBA(249, 249, 249, 1)
+        Height: =688
+        HoverBorderColor: =GalleryNavigation_4.BorderColor
+        HoverFill: =GalleryNavigation_4.Fill
+        Items: |
+            =If(_managerView, ManagerNavigation, EmployeeNavigation)
+        Layout: =Layout.Vertical
+        LoadingSpinnerColor: =GalleryNavigation_4.BorderColor
+        OnSelect: |-
+            =Set(_navMenuSelect, ThisItem.MenuItem);
+            If(
+                "Requests" in ThisItem.MenuItem, Navigate(HomeScreen, BorderStyle.None),
+                "Balance" in ThisItem.MenuItem, Navigate(LeaveBalanceScreen, BorderStyle.None),
+                "Holidays" in ThisItem.MenuItem, Navigate(CompanyHolidaysScreen, BorderStyle.None),
+                ThisItem.MenuItem = "About", Navigate(AboutScreen, BorderStyle.None),
+                ThisItem.MenuItem = "Log out", Navigate(LoginScreen, BorderStyle.None)
+            )
+        PressedBorderColor: =GalleryNavigation_4.BorderColor
+        PressedFill: =GalleryNavigation_4.Fill
+        ShowScrollbar: =false
+        TemplateFill: =If(ThisItem.MenuItem = _navMenuSelect, RGBA(255,255,255,1), RGBA(245,245,245,1))
+        TemplatePadding: =0
+        TemplateSize: =72
+        Width: =231
+        Y: =80
+        ZIndex: =32
+
+        LeftMenuSeparator_4 As rectangle:
+            AccessibleLabel: =ThisItem.MenuItem
+            DisabledFill: =LeftMenuSeparator_4.Fill
+            Fill: =RGBA(205, 205, 205, 1)
+            FocusedBorderColor: =LeftMenuSeparator_4.BorderColor
+            Height: =1
+            HoverFill: =LeftMenuSeparator_4.Fill
+            OnSelect: =Select(Parent)
+            PressedFill: =LeftMenuSeparator_4.Fill
+            Width: =GalleryNavigation_4.TemplateWidth
+            Y: =Parent.TemplateHeight - LeftMenuSeparator_4.Height
+            ZIndex: =1
+
+        Label2_4 As label:
+            Align: =TextPosition.Left
+            Color: =If(ThisItem.MenuItem = _navMenuSelect, RGBA(47,41,43,1), RGBA(10,100,204,1))
+            FocusedBorderColor: =Label2_4.BorderColor
+            FocusedBorderThickness: =2
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            HoverBorderColor: =Label2_4.BorderColor
+            HoverColor: =Label2_4.Color
+            HoverFill: =Label2_4.Fill
+            OnSelect: =Select(Parent)
+            PaddingLeft: =30
+            PressedBorderColor: =Label2_4.BorderColor
+            PressedColor: =Label2_4.Color
+            PressedFill: =Label2_4.Fill
+            Size: =13.5
+            TabIndex: =If(ThisItem.MenuItem = _navMenuSelect, 1, 0)
+            Text: =ThisItem.MenuItem
+            Width: =231
+            ZIndex: =2
+

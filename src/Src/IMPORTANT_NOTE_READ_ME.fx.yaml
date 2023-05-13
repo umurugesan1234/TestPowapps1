@@ -1,0 +1,172 @@
+IMPORTANT_NOTE_READ_ME As screen:
+    Height: =Max(App.Height, App.DesignHeight)
+    Orientation: =If(IMPORTANT_NOTE_READ_ME.Width < IMPORTANT_NOTE_READ_ME.Height, Layout.Vertical, Layout.Horizontal)
+    Size: =1 + CountRows(App.SizeBreakpoints) - CountIf(App.SizeBreakpoints, Value >= IMPORTANT_NOTE_READ_ME.Width)
+    Width: =Max(App.Width, App.DesignWidth)
+
+    CDVBHeaderBackground_1 As rectangle:
+        DisabledFill: =CDVBHeaderBackground_1.Fill
+        Fill: =RGBA(0, 71, 144, 0.2)
+        FocusedBorderColor: =CDVBHeaderBackground_1.BorderColor
+        FocusedBorderThickness: =0
+        Height: =80
+        HoverFill: =CDVBHeaderBackground_1.Fill
+        PressedFill: =CDVBHeaderBackground_1.Fill
+        Width: =1366
+        Y: =688
+        ZIndex: =1
+
+    HtmlText1 As htmlViewer:
+        Font: =Font.Lato
+        Height: =610
+        HoverBorderColor: =HtmlText1.BorderColor
+        HtmlText: |-
+            ="<p>This sample app is mainly intended for learning purposes. Please consider the following remarks:
+            <ul>
+                <li><b>Fictitious data</b><br/>
+                All data that comes with the app, like vacation balance, leave types, and company holidays, is fictitious sample data, stored in in-memory collections of the app. Follow <a href='https://go.microsoft.com/fwlink/?linkid=2125249' target='_blank'>these instructions</a> (<a href='https://go.microsoft.com/fwlink/?linkid=2125249' target='_blank'>https://go.microsoft.com/fwlink/?linkid=2125249</a>) instead to create a version of this app that comes with data stored in the cloud.<br/><br/></li>
+                <li><b>In-memory data storage</b><br/>
+                Leave requests created are stored in in-memory collections of the app. This means that:
+                    <ul>
+                        <li>Leave requests will only exist for the current user and during that user's session.</li>
+                        <li>Leave requests will not be retained upon closing the app and they are not visible to other users.</li>
+                    </ul>
+                    <br/>
+                </li>
+                <li><b>Sending of emails disabled by default</b><br/>
+                This app leverages an Office 365 Outlook connector to send e-mails to the designated approver (the user's manager by default) of a leave request. It optionally also sends emails from the approver to the requester when a leave request is approved or declined. By default, the sending of all these emails has been disabled. <br/>
+                <br/>
+                This has been done to avoid confusion when the app is only using fictitious and in-memory data collections.<br/>
+                <br/>
+                The sending of these emails can be enabled by changing the following line in the App <i>OnStart</i> function<br/>
+                from:
+                <br/>&nbsp;&nbsp;&nbsp;&nbsp;<i>Set(_sendEmailsEnabled, false);</i><br/>
+                to:
+                <br/>&nbsp;&nbsp;&nbsp;&nbsp;<i>Set(_sendEmailsEnabled, true);</i><br/>  
+            
+            </ul>"
+        PaddingLeft: =10
+        PaddingRight: =5.00
+        PaddingTop: =5.00
+        PressedBorderColor: =HtmlText1.BorderColor
+        Size: =15
+        Width: =1366
+        X: =0.00
+        Y: =80
+        ZIndex: =2
+
+    icon5_9 As icon.ArrowRight:
+        Color: =Color.White
+        DisabledFill: =icon5_9.Fill
+        DisplayMode: =DisplayMode.View
+        FocusedBorderColor: =icon5_9.BorderColor
+        FocusedBorderThickness: =0
+        HoverBorderColor: =ColorFade(icon5_9.BorderColor, 20%)
+        HoverColor: =ColorFade(icon5_9.Color, 20%)
+        HoverFill: =icon5_9.Fill
+        Icon: =Icon.ArrowRight
+        PressedBorderColor: =ColorFade(icon5_9.BorderColor, -20%)
+        PressedColor: =ColorFade(icon5_9.Color, -20%)
+        PressedFill: =icon5_9.Fill
+        Width: =32
+        X: =143 + 0
+        Y: =9 + 0
+        ZIndex: =7
+
+    HtmlText2 As htmlViewer:
+        Color: =RGBA(9, 33, 98, 1)
+        Height: =78
+        HoverBorderColor: =HtmlText2.BorderColor
+        HtmlText: |-
+            ="<div align='center'><b>Would you like a version of this app with Excel data stored in the cloud?</b><br/>
+            Follow <a href='https://go.microsoft.com/fwlink/?linkid=2125249' target='_blank'>these instructions</a> (<a href='https://go.microsoft.com/fwlink/?linkid=2125249' target='_blank'>https://go.microsoft.com/fwlink/?linkid=2125249</a>) to get a version of the app with cloud storage.</div>"
+        PaddingLeft: =10
+        PressedBorderColor: =HtmlText2.BorderColor
+        Size: =16
+        Width: =1366
+        Y: =690
+        ZIndex: =8
+
+    CDVBHeader As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =8
+
+        CDVBHeaderBackground As rectangle:
+            DisabledFill: =CDVBHeaderBackground.Fill
+            Fill: =RGBA(0, 71, 144, 1)
+            FocusedBorderColor: =CDVBHeaderBackground.BorderColor
+            FocusedBorderThickness: =0
+            Height: =80
+            HoverFill: =CDVBHeaderBackground.Fill
+            PressedFill: =CDVBHeaderBackground.Fill
+            Width: =1366
+            ZIndex: =3
+
+        CDVBHeaderSubTitle As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =CDVBHeaderSubTitle.BorderColor
+            Font: =Font.Lato
+            Height: =80
+            HoverBorderColor: =CDVBHeaderSubTitle.BorderColor
+            HoverColor: =CDVBHeaderSubTitle.Color
+            HoverFill: =CDVBHeaderSubTitle.Fill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =CDVBHeaderSubTitle.BorderColor
+            PressedColor: =CDVBHeaderSubTitle.Color
+            PressedFill: =CDVBHeaderSubTitle.Fill
+            Size: =18
+            Text: ="LEAVE"
+            Width: =100
+            X: =178
+            ZIndex: =4
+
+        CDVBHeaderTitle As label:
+            Color: =RGBA(255, 255, 255, 1)
+            FocusedBorderColor: =CDVBHeaderTitle.BorderColor
+            Font: =Font.Lato
+            Height: =80
+            HoverBorderColor: =CDVBHeaderTitle.BorderColor
+            HoverColor: =CDVBHeaderTitle.Color
+            HoverFill: =CDVBHeaderTitle.Fill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =CDVBHeaderTitle.BorderColor
+            PressedColor: =CDVBHeaderTitle.Color
+            PressedFill: =CDVBHeaderTitle.Fill
+            Size: =18
+            Text: ="REQUEST"
+            Width: =117
+            X: =31
+            ZIndex: =5
+
+        CDVBHeaderTitle1 As label:
+            Align: =Align.Center
+            Color: =RGBA(255, 255, 0, 1)
+            FocusedBorderColor: =CDVBHeaderTitle1.BorderColor
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Bold
+            Height: =80
+            HoverBorderColor: =CDVBHeaderTitle1.BorderColor
+            HoverColor: =CDVBHeaderTitle1.Color
+            HoverFill: =CDVBHeaderTitle1.Fill
+            LineHeight: =1
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =CDVBHeaderTitle1.BorderColor
+            PressedColor: =CDVBHeaderTitle1.Color
+            PressedFill: =CDVBHeaderTitle1.Fill
+            Size: =18
+            Text: ="Important Note"
+            Width: =1366
+            ZIndex: =6
+
