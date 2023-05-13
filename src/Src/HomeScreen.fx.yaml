@@ -144,7 +144,7 @@ HomeScreen As screen:
             PressedColor: =LblHeaderTitle2.Color
             PressedFill: =LblHeaderTitle2.Fill
             Size: =18
-            Text: =Upper("Leave")
+            Text: ="VACATION"
             Width: =138
             X: =178
             ZIndex: =6
