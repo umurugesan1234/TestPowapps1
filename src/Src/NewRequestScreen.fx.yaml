@@ -220,7 +220,7 @@ NewRequestScreen As screen:
             PressedColor: =LblHeaderTitle2_1.Color
             PressedFill: =LblHeaderTitle2_1.Fill
             Size: =18
-            Text: =Upper("Leave")
+            Text: ="VACTION"
             Width: =138
             X: =178
             ZIndex: =29
@@ -370,6 +370,7 @@ NewRequestScreen As screen:
             BorderColor: =If(And(!_editingRequest, LeaveStartDatePicker.SelectedDate < Today()) || LeaveStartDatePicker.SelectedDate > LeaveEndDatePicker.SelectedDate, Color.Red, RGBA(0, 71, 144, 1))
             DefaultDate: =_leaveStart
             FocusedBorderColor: =LeaveStartDatePicker.BorderColor
+            Font: =Font.Lato
             HoverBorderColor: =LeaveStartDatePicker.BorderColor
             HoverFill: =LeaveStartDatePicker.Fill
             IconBackground: =RGBA(0, 71, 144, 1)
@@ -419,6 +420,7 @@ NewRequestScreen As screen:
             BorderColor: =If(LeaveStartDatePicker.SelectedDate > LeaveEndDatePicker.SelectedDate, Color.Red, RGBA(0, 71, 144, 1))
             DefaultDate: =_leaveEnd
             FocusedBorderColor: =LeaveEndDatePicker.BorderColor
+            Font: =Font.Lato
             HoverBorderColor: =LeaveEndDatePicker.BorderColor
             HoverFill: =LeaveEndDatePicker.Fill
             IconBackground: =RGBA(0, 71, 144, 1)
@@ -515,6 +517,7 @@ NewRequestScreen As screen:
             Align: =LayoutAlignItems.Center
             Color: =RGBA(255, 0, 0, 1)
             FocusedBorderColor: =Label1_13.BorderColor
+            Font: =Font.Lato
             Height: =44
             HoverBorderColor: =Label1_13.BorderColor
             HoverColor: =Label1_13.Color
